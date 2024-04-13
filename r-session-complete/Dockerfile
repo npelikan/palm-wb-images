@@ -57,6 +57,6 @@ RUN /opt/python/"${PYTHON_VERSION}"/bin/pip install \
 
 ENV PATH="/opt/python/${PYTHON_VERSION}/bin:${PATH}"
 
-COPY r-session-complete/vscode.extensions.conf /etc/rstudio/vscode.extensions.conf
+COPY vscode.extensions.conf /etc/rstudio/vscode.extensions.conf
 
 EXPOSE 8788/tcp
