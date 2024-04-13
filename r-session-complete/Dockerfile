@@ -1,7 +1,7 @@
 ARG SRC_IMAGE_NAME=product-base-pro
 ARG SRC_IMAGE_STUB=latest-py
 ARG REGISTRY=ghcr.io
-FROM ghcr.io/npelikan/${SRC_IMAGE_NAME}:ubuntu2204-${SRC_IMAGE_STUB}}
+FROM ghcr.io/npelikan/${SRC_IMAGE_NAME}:ubuntu2204-${SRC_IMAGE_STUB}
 LABEL maintainer="RStudio Docker <docker@rstudio.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
