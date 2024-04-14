@@ -10,7 +10,7 @@ ARG PYTHON_VERSION=3.11.9
 ARG PYTHON_VERSION_ALT=3.10.14
 ARG TINI_VERSION=0.19.0
 ARG QUARTO_VERSION=1.4.553
-ARG DRIVERS_VERSION=2024.03.0
+ARG DRIVERS_VERSION=2024.03.0-1
 
 ### Update/upgrade system packages ###
 RUN dnf install -y -q dnf-plugins-core \
@@ -97,8 +97,9 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN curl -O https://cdn.rstudio.com/drivers/7C152C12/installer/rstudio-drivers-${DRIVERS_VERSION}.el7.x86_64.rpm \
-    && dnf install -y ./rstudio-drivers-${DRIVERS_VERSION}.el7.x86_64.rpm \
+RUN curl -O https://cdn.rstudio.com/drivers/7C152C12/installer/rstudio-drivers-${DRIVERS_VERSION}.el.x86_64.rpm
+
+RUN dnf install -y ./rstudio-drivers-${DRIVERS_VERSION}.el7.x86_64.rpm \
     && dnf clean all \
     && rm -f rstudio-drivers-${DRIVERS_VERSION}.el7.x86_64.rpm \
     && cp /opt/rstudio-drivers/odbcinst.ini.sample /etc/odbcinst.ini \
