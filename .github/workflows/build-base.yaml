@@ -1,0 +1,39 @@
+on:
+    push:
+      branches:
+        - main
+name: Build and Push Product Base Images
+jobs: 
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+            
+            - name: Login to ghcr.io
+              uses: docker/login-action@v3
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+            
+            - name: Build and Push ubuntu r-session-complete
+              uses: docker/build-push-action@v5
+              with:
+                context: ./product-base-pro
+                push: true
+                tags: |
+                  ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
+            
+            - name: Build and Push rl9 r-session-complete
+              uses: docker/build-push-action@v5
+              with:
+                context: ./rl9/product-base-pro
+                push: true
+                tags: |
+                  ghcr.io/npelikan/product-base-pro:rl9-latest
+
+
+              
+
+            
