@@ -51,18 +51,20 @@ jobs:
                 username: ${{ github.actor }}
                 password: ${{ secrets.GITHUB_TOKEN }}
             
-            - name: Build and push Rsession Pro
-              run: |
-                docker build -t ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py product-base-pro
-                docker image push ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
+            # - name: Build and push Rsession Pro
+            #   run: |
+            #     docker build -t ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py product-base-pro
+            #     docker image push ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
 
             - name: Build and Push r-session-complete
               run: |
+                export TAG_VERSION=$(echo -n "${{ steps.get-version.outputs.VERSION }}" | sed 's/+/-/g')
+                docker pull ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
                 docker build \
                     --build-arg RSW_VERSION=${{ steps.get-version.outputs.VERSION }} \
                     -t ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.VERSION }}-ubuntu2204-latest-py \
                     r-session-complete
-                docker image push ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.VERSION }}-ubuntu2204-latest-py
+                docker image push ghcr.io/npelikan/r-session-complete:$TAG_VERSION-ubuntu2204-latest-py
 
               
 
