@@ -67,6 +67,7 @@ jobs:
                 tags:
                     - ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py
                     - ghcr.io/npelikan/pwb-session-daily:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204
+                    - ghcr.io/npelikan/pwb-session-daily:latest
 
             # - name: Build and Push r-session-complete
             #   run: |
