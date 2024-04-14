@@ -28,6 +28,7 @@ jobs:
               run: |
                 VERSION=$(python tools/get-version.py workbench --type=daily --local)  
                 echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+                echo "TAG_VERSION=$(echo -n "$VERSION" | sed 's/+/-/g')" >> $GITHUB_OUTPUT
             
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
@@ -58,13 +59,12 @@ jobs:
 
             - name: Build and Push r-session-complete
               run: |
-                export TAG_VERSION=$(echo -n "${{ steps.get-version.outputs.VERSION }}" | sed 's/+/-/g')
                 docker pull ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
                 docker build \
                     --build-arg RSW_VERSION=${{ steps.get-version.outputs.VERSION }} \
-                    -t ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.VERSION }}-ubuntu2204-latest-py \
+                    -t ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py \
                     r-session-complete
-                docker image push ghcr.io/npelikan/r-session-complete:$TAG_VERSION-ubuntu2204-latest-py
+                docker image push ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py
 
               
 
