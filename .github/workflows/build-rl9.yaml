@@ -8,7 +8,7 @@ on:
       branches:
         - main
     pull_request:
-name: Build and Push Workbench Daily Images
+name: Build and Push Rocky9 Workbench Daily Images
 jobs: 
     build:
         runs-on: ubuntu-latest
