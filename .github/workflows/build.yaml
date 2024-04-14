@@ -56,15 +56,27 @@ jobs:
             #   run: |
             #     docker build -t ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py product-base-pro
             #     docker image push ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
-
+            
             - name: Build and Push r-session-complete
-              run: |
-                docker pull ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
-                docker build \
-                    --build-arg RSW_VERSION=${{ steps.get-version.outputs.VERSION }} \
-                    -t ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py \
-                    r-session-complete
-                docker image push ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py
+              uses: docker/build-push-action@v5
+              with:
+                context: ./r-session-complete
+                push: true
+                build-args: 
+                    - RSW_VERSION=${{ steps.get-version.outputs.VERSION }}
+                tags:
+                    - ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py
+                    - ghcr.io/npelikan/pwb-session-daily:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204
+
+            # - name: Build and Push r-session-complete
+            #   run: |
+            #     docker pull ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
+            #     docker build \
+            #         --build-arg RSW_VERSION=${{ steps.get-version.outputs.VERSION }} \
+            #         -t ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py \
+
+            #         r-session-complete
+            #     docker image push ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py
 
               
 
