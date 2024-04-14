@@ -20,7 +20,7 @@ jobs:
             - name: Build and Push ubuntu r-session-complete
               uses: docker/build-push-action@v5
               with:
-                context: ./product-base-pro
+                context: product-base-pro
                 push: true
                 tags: |
                   ghcr.io/npelikan/product-base-pro:ubuntu2204-latest-py
@@ -28,7 +28,7 @@ jobs:
             - name: Build and Push rl9 r-session-complete
               uses: docker/build-push-action@v5
               with:
-                context: ./rl9/product-base-pro
+                context: rl9/product-base-pro
                 push: true
                 tags: |
                   ghcr.io/npelikan/product-base-pro:rl9-latest
