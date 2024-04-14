@@ -26,7 +26,7 @@ jobs:
             - name: Get RSW Version
               id: get-version
               run: |
-                VERSION=$(just -f ci.Justfile get-version workbench --type=daily --local)
+                VERSION=$(python tools/get-version.py workbench --type=daily --local)  
                 echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
             
             - name: Set up Docker Buildx
