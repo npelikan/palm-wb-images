@@ -57,6 +57,8 @@ RUN /opt/python/"${PYTHON_VERSION}"/bin/pip install \
 
 ENV PATH="/opt/python/${PYTHON_VERSION}/bin:${PATH}"
 
+LABEL org.opencontainers.image.source=https://github.com/npelikan/palm-wb-images
+
 COPY vscode.extensions.conf /etc/rstudio/vscode.extensions.conf
 
 EXPOSE 8788/tcp

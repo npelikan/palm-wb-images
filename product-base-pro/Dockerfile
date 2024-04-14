@@ -5,10 +5,11 @@ LABEL maintainer="Posit Docker <docker@posit.co>"
 ARG DEBIAN_FRONTEND=noninteractive
 ARG R_VERSION=4.2.3
 ARG R_VERSION_ALT=4.1.3
+ARG R_VERSION_ALT_2=4.3.2
 ARG PYTHON_VERSION=3.11.9
 ARG PYTHON_VERSION_ALT=3.10.14
 ARG TINI_VERSION=0.19.0
-ARG QUARTO_VERSION=1.3.340
+ARG QUARTO_VERSION=1.4.553
 ARG DRIVERS_VERSION=2024.03.0
 
 
@@ -106,10 +107,13 @@ RUN curl -o quarto.tar.gz -L https://github.com/quarto-dev/quarto-cli/releases/d
 ### Install R versions ###
 RUN curl -O https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb \
     && curl -O https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${R_VERSION_ALT}_1_amd64.deb \
+    && curl -O https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${R_VERSION_ALT_2}_1_amd64.deb \
     && apt-get install -yq --no-install-recommends ./r-${R_VERSION}_1_amd64.deb \
     && apt-get install -yq --no-install-recommends ./r-${R_VERSION_ALT}_1_amd64.deb \
+    && apt-get install -yq --no-install-recommends ./r-${R_VERSION_ALT_2}_1_amd64.deb \
     && rm -f ./r-${R_VERSION}_1_amd64.deb \
     && rm -f ./r-${R_VERSION_ALT}_1_amd64.deb \
+    && rm -f ./r-${R_VERSION_ALT_2}_1_amd64.deb \
     && ln -s /opt/R/${R_VERSION} /opt/R/default \
     && ln -s /opt/R/default/bin/R /usr/local/bin/R \
     && ln -s /opt/R/default/bin/Rscript /usr/local/bin/Rscript
@@ -159,5 +163,6 @@ RUN apt-get update \
 
 LABEL rstudio.pro-drivers.version="${DRIVERS_VERSION}"
   
+LABEL org.opencontainers.image.source=https://github.com/npelikan/palm-wb-images
 
 ENTRYPOINT ["/tini", "--"]
