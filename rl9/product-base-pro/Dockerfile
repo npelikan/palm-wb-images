@@ -97,11 +97,11 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN curl -O https://cdn.rstudio.com/drivers/7C152C12/installer/rstudio-drivers-${DRIVERS_VERSION}.el.x86_64.rpm
+RUN curl -o drivers.rpm -L https://cdn.rstudio.com/drivers/7C152C12/installer/rstudio-drivers-${DRIVERS_VERSION}.el.x86_64.rpm
 
-RUN dnf install -y ./rstudio-drivers-${DRIVERS_VERSION}.el7.x86_64.rpm \
+RUN dnf install -y drivers.rpm \
     && dnf clean all \
-    && rm -f rstudio-drivers-${DRIVERS_VERSION}.el7.x86_64.rpm \
+    && rm -f drivers.rpm \
     && cp /opt/rstudio-drivers/odbcinst.ini.sample /etc/odbcinst.ini \
     && "/opt/R/${R_VERSION}/bin/R" -e 'install.packages("odbc", repos="https://packagemanager.rstudio.com/cran/__linux__/rhel9/latest")'
 
