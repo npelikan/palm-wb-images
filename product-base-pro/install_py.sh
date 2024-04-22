@@ -1,8 +1,7 @@
 #!/bin/bash
 
 IFS=','
-read -a version_arr <<< "$1"
-for PYTHON_VERSION in $version_arr
+for PYTHON_VERSION in ${1[@]}
 do
     curl -O https://cdn.rstudio.com/python/ubuntu-2204/pkgs/python-${PYTHON_VERSION}_1_amd64.deb
     apt-get install -yq --no-install-recommends ./python-${PYTHON_VERSION}_1_amd64.deb
