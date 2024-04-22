@@ -114,16 +114,17 @@ RUN apt-get update \
 
 ### Install R versions ###
 COPY install_r.sh ./install_r.sh
-RUN ./install_r.sh ${R_VERSIONS}
-RUN ln -s /opt/R/${DEFAULT_R_VERSION} /opt/R/default \
+RUN chmod +x ./install_r.sh \
+    && ./install_r.sh ${R_VERSIONS} \
+    && ln -s /opt/R/${DEFAULT_R_VERSION} /opt/R/default \
     && ln -s /opt/R/default/bin/R /usr/local/bin/R \
     && ln -s /opt/R/default/bin/Rscript /usr/local/bin/Rscript
 
 ### Install Python versions ###
 COPY install_py.sh ./install_py.sh
-RUN ./install_py.sh ${PYTHON_VERSIONS}
-RUN ln -s /opt/python/${DEFAULT_PYTHON_VERSION} /opt/python/default
-
+RUN chmod +x ./install_py.sh \
+    && ./install_py.sh ${PYTHON_VERSIONS} \
+    && ln -s /opt/python/${DEFAULT_PYTHON_VERSION} /opt/python/default
 
 ### Locale configuration ###
 RUN localedef -i en_US -f UTF-8 en_US.UTF-8
