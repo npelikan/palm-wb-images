@@ -115,7 +115,7 @@ RUN apt-get update \
 ### Install R versions ###
 COPY install_r.sh ./install_r.sh
 RUN chmod +x ./install_r.sh \
-    && ./install_r.sh "${R_VERSIONS}"" \
+    && ./install_r.sh "${R_VERSIONS}" \
     && ln -s /opt/R/${DEFAULT_R_VERSION} /opt/R/default \
     && ln -s /opt/R/default/bin/R /usr/local/bin/R \
     && ln -s /opt/R/default/bin/Rscript /usr/local/bin/Rscript
@@ -123,7 +123,7 @@ RUN chmod +x ./install_r.sh \
 ### Install Python versions ###
 COPY install_py.sh ./install_py.sh
 RUN chmod +x ./install_py.sh \
-    && ./install_py.sh "${PYTHON_VERSIONS}"" \
+    && ./install_py.sh "${PYTHON_VERSIONS}" \
     && ln -s /opt/python/${DEFAULT_PYTHON_VERSION} /opt/python/default
 
 ### Locale configuration ###
