@@ -1,7 +1,7 @@
 #!/bin/bash
 
-IFS=' '
-read -ra version_arr <<< "$1"
+IFS=','
+read -a version_arr <<< "$1"
 for R_VERSION in $version_arr
 do
     curl -O https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb

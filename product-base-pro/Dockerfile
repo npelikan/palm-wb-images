@@ -3,9 +3,9 @@ LABEL maintainer="Posit Docker <docker@posit.co>"
 
 ### ARG declarations ###
 ARG DEBIAN_FRONTEND=noninteractive
-ARG R_VERSIONS="4.3.2 4.2.3 4.1.3 4.0.5"
+ARG R_VERSIONS="4.3.2,4.2.3,4.1.3,4.0.5"
 ARG DEFAULT_R_VERSION=4.2.3
-ARG PYTHON_VERSIONS="3.12.3 3.11.9 3.10.14 3.9.19 3.8.19"
+ARG PYTHON_VERSIONS="3.12.3,3.11.9,3.10.14,3.9.19,3.8.19"
 ARG DEFAULT_PYTHON_VERSION=3.11.9
 ARG TINI_VERSION=0.19.0
 ARG QUARTO_VERSION=1.4.553
@@ -115,7 +115,7 @@ RUN apt-get update \
 ### Install R versions ###
 COPY install_r.sh ./install_r.sh
 RUN chmod +x ./install_r.sh \
-    && ./install_r.sh "${R_VERSIONS}" \
+    && ./install_r.sh ${R_VERSIONS} \
     && ln -s /opt/R/${DEFAULT_R_VERSION} /opt/R/default \
     && ln -s /opt/R/default/bin/R /usr/local/bin/R \
     && ln -s /opt/R/default/bin/Rscript /usr/local/bin/Rscript
@@ -123,7 +123,7 @@ RUN chmod +x ./install_r.sh \
 ### Install Python versions ###
 COPY install_py.sh ./install_py.sh
 RUN chmod +x ./install_py.sh \
-    && ./install_py.sh "${PYTHON_VERSIONS}" \
+    && ./install_py.sh ${PYTHON_VERSIONS} \
     && ln -s /opt/python/${DEFAULT_PYTHON_VERSION} /opt/python/default
 
 ### Locale configuration ###
