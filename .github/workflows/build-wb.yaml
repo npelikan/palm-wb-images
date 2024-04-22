@@ -1,13 +1,15 @@
 on:
-    schedule:
-      # every morning at 8am UTC
-      # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
-      # make sure to change the `if` commands below when changing the schedule
-      - cron: '0 8 * * *'
-    push:
-      branches:
-        - main
-    pull_request:
+  schedule:
+    # every morning at 8am UTC
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
+    # make sure to change the `if` commands below when changing the schedule
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: branch to build
+        required: true
+          
 name: Build and Push Workbench Daily Images
 jobs: 
     build:
@@ -20,8 +22,10 @@ jobs:
                 ref: 'main'
       
             - name: Check Out Repo at Triggered Branch
-              if: github.event.schedule != '0 8 * * *'
+              if: github.event_name == 'workflow_dispatch'
               uses: actions/checkout@v3
+              with:
+                ref: ${{ inputs.branch }} 
              
             - name: Get RSW Version
               id: get-version
