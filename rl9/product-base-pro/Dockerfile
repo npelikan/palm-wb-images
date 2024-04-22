@@ -4,10 +4,10 @@ FROM rockylinux:9
 LABEL maintainer="Posit Docker <docker@posit.co>"
 
 ### ARG declarations ###
-ARG R_VERSION=4.2.3
-ARG R_VERSION_ALT=4.1.3
-ARG PYTHON_VERSION=3.11.9
-ARG PYTHON_VERSION_ALT=3.10.14
+ARG R_VERSIONS="4.3.2,4.2.3,4.1.3,4.0.5"
+ARG DEFAULT_R_VERSION=4.2.3
+ARG PYTHON_VERSIONS="3.12.3,3.11.9,3.10.14,3.9.19,3.8.19"
+ARG DEFAULT_PYTHON_VERSION=3.11.9
 ARG TINI_VERSION=0.19.0
 ARG QUARTO_VERSION=1.4.553
 ARG DRIVERS_VERSION=2024.03.0-1
@@ -65,31 +65,26 @@ RUN curl -o quarto.tar.gz -L https://github.com/quarto-dev/quarto-cli/releases/d
     && rm -f quarto.tar.gz \
     && ln -s /opt/quarto/${QUARTO_VERSION}/bin/quarto /usr/local/bin/quarto
 
-### Install R versions ###
-RUN curl -O https://cdn.rstudio.com/r/rhel-9/pkgs/R-${R_VERSION}-1-1.x86_64.rpm \
-    && curl -O https://cdn.rstudio.com/r/rhel-9/pkgs/R-${R_VERSION_ALT}-1-1.x86_64.rpm \
-    && dnf install -y R-${R_VERSION}-1-1.x86_64.rpm \
-    && dnf install -y R-${R_VERSION_ALT}-1-1.x86_64.rpm \
+RUN curl -o drivers.rpm -L https://cdn.rstudio.com/drivers/7C152C12/installer/rstudio-drivers-${DRIVERS_VERSION}.el.x86_64.rpm \
+    && dnf install -y drivers.rpm \
     && dnf clean all \
-    && rm -rf R-${R_VERSION}-1-1.x86_64.rpm \
-    && rm -rf R-${R_VERSION_ALT}-1-1.x86_64.rpm \
+    && rm -f drivers.rpm \
+    && cp /opt/rstudio-drivers/odbcinst.ini.sample /etc/odbcinst.ini
+
+### Install R versions ###
+COPY install_r.sh ./install_r.sh
+RUN chmod +x ./install_r.sh \
+    && ./install_r.sh ${R_VERSIONS} \
+    && dnf clean all \
     && ln -s /opt/R/${R_VERSION} /opt/R/default \
     && ln -s /opt/R/default/bin/R /usr/local/bin/R \
     && ln -s /opt/R/default/bin/Rscript /usr/local/bin/Rscript
 
 ### Install Python versions ###
-RUN curl -O https://cdn.rstudio.com/python/rhel-9/pkgs/python-${PYTHON_VERSION}-1-1.x86_64.rpm \
-    && curl -O https://cdn.rstudio.com/python/rhel-9/pkgs/python-${PYTHON_VERSION_ALT}-1-1.x86_64.rpm \
-    && dnf install -y python-${PYTHON_VERSION}-1-1.x86_64.rpm \
-    && dnf install -y python-${PYTHON_VERSION_ALT}-1-1.x86_64.rpm \
-    && dnf clean all \
-    && rm -rf python-${PYTHON_VERSION}-1-1.x86_64.rpm \
-    && rm -rf python-${PYTHON_VERSION_ALT}-1-1.x86_64.rpm \
-    && /opt/python/${PYTHON_VERSION}/bin/python3 -m pip install 'virtualenv<20' \
-    && /opt/python/${PYTHON_VERSION}/bin/python3 -m pip install --upgrade setuptools \
-    && /opt/python/${PYTHON_VERSION_ALT}/bin/python3 -m pip install 'virtualenv<20' \
-    && /opt/python/${PYTHON_VERSION_ALT}/bin/python3 -m pip install --upgrade setuptools \
-    && ln -s /opt/python/${PYTHON_VERSION} /opt/python/default
+COPY install_py.sh ./install_py.sh
+RUN chmod +x ./install_py.sh \
+    && ./install_py.sh ${PYTHON_VERSIONS} \
+    && ln -s /opt/python/${DEFAULT_PYTHON_VERSION} /opt/python/default
 
 ### Locale configuration ###
 RUN localedef -i en_US -f UTF-8 en_US.UTF-8
@@ -97,21 +92,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN curl -o drivers.rpm -L https://cdn.rstudio.com/drivers/7C152C12/installer/rstudio-drivers-${DRIVERS_VERSION}.el.x86_64.rpm
-
-RUN dnf install -y drivers.rpm \
-    && dnf clean all \
-    && rm -f drivers.rpm \
-    && cp /opt/rstudio-drivers/odbcinst.ini.sample /etc/odbcinst.ini \
-    && "/opt/R/${R_VERSION}/bin/R" -e 'install.packages("odbc", repos="https://packagemanager.rstudio.com/cran/__linux__/rhel9/latest")'
-
-LABEL posit.r.version="${R_VERSION}" \
-      posit.r.version_alt="${R_VERSION_ALT}" \
-      posit.python.version="${PYTHON_VERSION}" \
-      posit.python.version_alt="${PYTHON_VERSION_ALT}" \
-      posit.tini.version="${TINI_VERSION}" \
-      posit.quarto.version="${QUARTO_VERSION}" \
-      rstudio.pro-drivers.version="${DRIVERS_VERSION}"
 
 LABEL org.opencontainers.image.source=https://github.com/npelikan/palm-wb-images
 
