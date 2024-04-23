@@ -8,14 +8,12 @@ ARG R_VERSION_ALT=4.1.3
 ARG PYTHON_VERSION=3.11.9
 ARG PYTHON_VERSION_ALT=3.10.14
 ARG JUPYTERLAB_VERSION=3.6.5
-ARG RSW_VERSION=2024.04.0-daily-693.pro11
-ARG RSW_NAME=rstudio-workbench
-ARG RSW_DOWNLOAD_URL=https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/x86_64
+ARG RSW_VERSION=2024.04.0-725.pro7
 
 ### Install RSW
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN dnf install -y subversion
-RUN curl -o ./pwb.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION}-x86-64.rpm" \
+RUN curl -o ./pwb.rpm "https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/x86_64/rstudio-workbench-rhel-${RSW_VERSION}-x86_64.rpm" \
     && dnf install -y ./pwb.rpm \
     && rm ./pwb.rpm \
     && dnf clean all \
