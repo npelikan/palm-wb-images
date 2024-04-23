@@ -15,9 +15,9 @@ ARG RSW_DOWNLOAD_URL=https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/x86
 ### Install RSW
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN dnf install -y subversion
-RUN curl -o pwb.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION}-x86-64.rpm" \
-    && dnf install -y pwb.rpm \
-    && rm pwb.rpm \
+RUN curl -o ./pwb.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION}-x86-64.rpm" \
+    && dnf install -y ./pwb.rpm \
+    && rm ./pwb.rpm \
     && dnf clean all \
     && rm -rf /var/lib/rstudio-server/r-versions
 
