@@ -15,13 +15,13 @@ ARG RSW_DOWNLOAD_URL=https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/x86
 ### Install RSW
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN dnf install -y subversion \
-    && curl -o rstudio-workbench.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION}-x86-64.rpm" \
+    && curl -o pwb.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION}-x86-64.rpm" \
     && gpg --keyserver hkps://keys.openpgp.org --recv-keys 51C0B5BB19F92D60 \
     && gpg --export --armor 51C0B5BB19F92D60 > rstudio-signing.key \
     && rpm --import rstudio-signing.key \
-    # && rpm -K rstudio-workbench.rpm \
-    && dnf install -y rstudio-workbench.rpm \
-    && rm rstudio-workbench.rpm \
+    && rpm -K pwb.rpm \
+    && dnf install -y pwb.rpm \
+    && rm pwb.rpm \
     && dnf clean all \
     && rm -rf /var/lib/rstudio-server/r-versions
 
