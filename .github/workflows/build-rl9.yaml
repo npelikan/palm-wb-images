@@ -44,7 +44,7 @@ jobs:
                 context: ./rl9/r-session-complete
                 push: true
                 build-args: | 
-                    RSW_VERSION=${{ steps.get-version.outputs.VERSION }}
+                    RSW_VERSION=${{ steps.get-version.outputs.TAG_VERSION }}
                 tags: |
                     ghcr.io/npelikan/pwb-session-daily-rl9:${{ steps.get-version.outputs.TAG_VERSION }}
                     ghcr.io/npelikan/pwb-session-daily-rl9:latest
