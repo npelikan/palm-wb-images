@@ -1,4 +1,10 @@
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  schedule:
+    # every morning at 8am UTC
+    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
+    # make sure to change the `if` commands below when changing the schedule
+    - cron: '0 8 * * *'
 
 name: Build and Push Rocky9 Workbench Daily Images
 jobs: 
