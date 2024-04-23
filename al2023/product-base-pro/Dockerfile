@@ -14,10 +14,7 @@ ARG DRIVERS_VERSION=2024.03.0-1
 
 ### Update/upgrade system packages ###
 RUN dnf install -y -q dnf-plugins-core \
-    && dnf config-manager --enable crb \
     && dnf upgrade -y -q \
-    && dnf install -y -q \
-      epel-release \
     && dnf install -y -q \
       bzip2 \
       git \
@@ -31,7 +28,6 @@ RUN dnf install -y -q dnf-plugins-core \
       libxml2-devel \
       openssl-devel \
       openssh-clients \
-      pandoc \
       perl-Digest-MD5 \
       postgresql-libs \
       rrdtool \
@@ -41,6 +37,9 @@ RUN dnf install -y -q dnf-plugins-core \
       wget \
       which \
     && dnf clean all
+
+# TODO: Figure out how to install pandoc!
+
 
 ### Install tini ###
 ADD https://cdn.rstudio.com/platform/tini/v${TINI_VERSION}/tini-amd64 /tini
