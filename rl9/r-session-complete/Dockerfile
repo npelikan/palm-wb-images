@@ -10,12 +10,12 @@ ARG PYTHON_VERSION_ALT=3.10.14
 ARG JUPYTERLAB_VERSION=3.6.5
 ARG RSW_VERSION=2024.04.0-daily-693.pro11
 ARG RSW_NAME=rstudio-workbench
-ARG RSW_DOWNLOAD_URL=https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/x86_64/
+ARG RSW_DOWNLOAD_URL=https://s3.amazonaws.com/rstudio-ide-build/server/rhel9/x86_64
 
 ### Install RSW
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN dnf install -y subversion \
-    && curl -o rstudio-workbench.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION_URL}-x86-64.rpm" \
+    && curl -o rstudio-workbench.rpm "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION}-x86-64.rpm" \
     && gpg --keyserver hkps://keys.openpgp.org --recv-keys 51C0B5BB19F92D60 \
     && gpg --export --armor 51C0B5BB19F92D60 > rstudio-signing.key \
     && rpm --import rstudio-signing.key \
