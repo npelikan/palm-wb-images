@@ -1,5 +1,11 @@
-on: workflow_dispatch 
 name: Build and Push Product Base Images
+
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - main 
+ 
 jobs: 
   build-jammy:
     runs-on: ubuntu-latest
