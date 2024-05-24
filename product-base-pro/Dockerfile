@@ -1,5 +1,4 @@
 FROM ubuntu:22.04
-LABEL maintainer="Posit Docker <docker@posit.co>"
 
 ### ARG declarations ###
 ARG DEBIAN_FRONTEND=noninteractive
@@ -114,6 +113,7 @@ RUN apt-get update \
 
 ### Install R versions ###
 COPY install_r.sh ./install_r.sh
+COPY install_packages.r ./install_packages.r
 RUN chmod +x ./install_r.sh \
     && ./install_r.sh ${R_VERSIONS} \
     && ln -s /opt/R/${DEFAULT_R_VERSION} /opt/R/default \
@@ -131,13 +131,12 @@ RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+ENV TZ UTC
 
 ### Clean up ###
 RUN apt-get install -yqf --no-install-recommends \
     && apt-get autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-LABEL org.opencontainers.image.source=https://github.com/npelikan/palm-wb-images
 
 ENTRYPOINT ["/tini", "--"]
