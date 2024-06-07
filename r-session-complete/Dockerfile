@@ -27,6 +27,7 @@ RUN apt-get update \
       rrdtool \
       subversion \
       libzmq3-dev \
+      libgit2-dev \
     && RSW_VERSION_URL=$(echo -n "${RSW_VERSION}" | sed 's/+/-/g') \
     && curl -o rstudio-workbench.deb "${RSW_DOWNLOAD_URL}/${RSW_NAME}-${RSW_VERSION_URL}-amd64.deb" \
     # Pre 7/25/23 packages
