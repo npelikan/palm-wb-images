@@ -6,7 +6,7 @@ on:
         description: "Version to build"
         required: true
           
-name: Build and Push Workbench Daily Images
+name: Build and Push Databricks Workbench Daily Images
 jobs: 
     build:
         runs-on: ubuntu-latest

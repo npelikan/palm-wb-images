@@ -1,10 +1,15 @@
 on:
-  schedule:
-    # every morning at 8am UTC
-    # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
-    # make sure to change the `if` commands below when changing the schedule
-    - cron: '0 8 * * *'
+  # schedule:
+  #   # every morning at 8am UTC
+  #   # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
+  #   # make sure to change the `if` commands below when changing the schedule
+  #   - cron: '0 8 * * *'
   workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: "Version to build"
+        required: true
           
 name: Build and Push Workbench Daily Images
 jobs: 
@@ -23,10 +28,17 @@ jobs:
               with:
                 ref: ${{ inputs.branch }} 
              
+            # - name: Get RSW Version
+            #   id: get-version
+            #   run: |
+            #     VERSION=$(python tools/get-version.py workbench --type=daily --local)  
+            #     echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+            #     echo "TAG_VERSION=$(echo -n "$VERSION" | sed 's/+/-/g')" >> $GITHUB_OUTPUT
+            
             - name: Get RSW Version
               id: get-version
               run: |
-                VERSION=$(python tools/get-version.py workbench --type=daily --local)  
+                VERSION=${{inputs.version}} 
                 echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
                 echo "TAG_VERSION=$(echo -n "$VERSION" | sed 's/+/-/g')" >> $GITHUB_OUTPUT
             
@@ -48,10 +60,7 @@ jobs:
                 build-args: | 
                     RSW_VERSION=${{ steps.get-version.outputs.VERSION }}
                 tags: |
-                    ghcr.io/npelikan/r-session-complete:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204-latest-py
                     ghcr.io/npelikan/pwb-session-daily:${{ steps.get-version.outputs.TAG_VERSION }}-ubuntu2204
-                    ghcr.io/npelikan/pwb-session-daily:latest
-
 
               
 
